@@ -1,0 +1,1 @@
+enum VideoType { landscape, portrait }
