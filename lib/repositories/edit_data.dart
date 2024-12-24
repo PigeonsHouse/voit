@@ -12,10 +12,8 @@ class EditDataRepositoryImpl extends EditDataRepository {
       resolution: const Rect.fromLTWH(0, 0, 1920, 1080),
       scenes: [
         SceneData(
-          id: 0,
           objects: [
             VideoObject(
-              id: 0,
               startTime: 0,
               duration: 5,
               position: const Offset(100, 100),
@@ -48,10 +46,8 @@ class EditDataRepositoryImpl extends EditDataRepository {
       resolution: const Rect.fromLTWH(0, 0, 1920, 1080),
       scenes: [
         SceneData(
-          id: 0,
           objects: [
             VideoObject(
-              id: 0,
               startTime: 0,
               duration: 5,
               position: const Offset(100, 100),
