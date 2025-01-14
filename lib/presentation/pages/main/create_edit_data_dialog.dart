@@ -20,8 +20,8 @@ class CreateEditDataDialogState extends ConsumerState<CreateEditDataDialog> {
   final newEditDataFormKey = GlobalKey<FormState>();
 
   ButtonStyle selectedButtonStyle = const ButtonStyle(
-    backgroundColor: MaterialStatePropertyAll(Colors.purple),
-    foregroundColor: MaterialStatePropertyAll(Colors.white),
+    backgroundColor: WidgetStatePropertyAll(Colors.purple),
+    foregroundColor: WidgetStatePropertyAll(Colors.white),
   );
 
   String? titleValidator(String? value) {
@@ -93,7 +93,7 @@ class CreateEditDataDialogState extends ConsumerState<CreateEditDataDialog> {
                 ),
               ),
               SimpleDialogOption(
-                child: ButtonBar(
+                child: OverflowBar(
                   alignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
@@ -118,7 +118,7 @@ class CreateEditDataDialogState extends ConsumerState<CreateEditDataDialog> {
                 ),
               ),
               SimpleDialogOption(
-                child: ButtonBar(children: [
+                child: OverflowBar(children: [
                   ElevatedButton(
                     onPressed: closeDialog,
                     style: ElevatedButton.styleFrom(
