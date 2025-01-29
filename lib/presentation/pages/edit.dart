@@ -33,64 +33,81 @@ class Edit extends ConsumerWidget {
     final targetEditData = ref.watch(editDataNotifierProvider);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Edit'),
-                Text(targetEditData.title),
-                Text(targetEditData.resolution.toString()),
-                Text(targetEditData.scenes.toString()),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  color: Colors.purple,
-                  alignment: Alignment.centerLeft,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: pickImage,
-                          child: const Column(
-                            children: [
-                              Icon(
-                                Icons.camera_alt_outlined,
-                                color: Colors.white,
-                              ),
-                              Text('カメラロール', selectionColor: Colors.white),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        GestureDetector(
-                          onTap: pickMedia,
-                          child: const Column(
-                            children: [
-                              Icon(Icons.photo_library_outlined),
-                              Text('メディア'),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
+      appBar: AppBar(
+        title: const Text('EDIT'),
+        backgroundColor: Colors.greenAccent,
+        actions: [
+          IconButton(onPressed: () => {
+
+
+          }, icon: const Icon(Icons.file_upload))
         ],
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(targetEditData.title),
+                  Text(targetEditData.resolution.toString()),
+                  Text(targetEditData.scenes.toString()),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.black12,
+                          width: 1
+                        )
+                      )
+                    ),
+                    alignment: Alignment.centerLeft,
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: pickImage,
+                            child: const Column(
+                              children: [
+                                Icon(
+                                  Icons.camera_alt_outlined,
+                                ),
+                                Text('カメラロール', selectionColor: Colors.white),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          GestureDetector(
+                            onTap: pickMedia,
+                            child: const Column(
+                              children: [
+                                Icon(Icons.photo_library_outlined),
+                                Text('メディア'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
