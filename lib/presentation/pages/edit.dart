@@ -9,13 +9,31 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 
 enum RootMenuState {
   cameraRoll,
   media,
 }
 
+String getDateToString(DateTime dt) {
+  final year = dt.year;
+  final month = zeroPadding("${dt.month}");
+  final day = zeroPadding("${dt.day}");
+  final hour = zeroPadding("${dt.hour}");
+  final minute = zeroPadding("${dt.minute}");
+  final second = zeroPadding("${dt.second}");
+  return "$year$month$day$hour$minute$second";
+}
+
+String zeroPadding(String str) {
+  var addZero = "0$str";
+  final pos = addZero.length;
+  return addZero.substring(pos - 2, pos);
+}
+
 final imagePicker = ImagePicker();
+const MethodChannel _channel = MethodChannel('com.example.voit/media_scanner');
 
 class Edit extends ConsumerStatefulWidget {
   const Edit({super.key});
@@ -57,21 +75,20 @@ class EditState extends ConsumerState<Edit> {
   Future<void> startEncode() async {
     if (_imagePath == null) return;
 
-    Directory? externalDir;
-    if (Platform.isAndroid) {
-      externalDir = await getExternalStorageDirectory();
-    } else if (Platform.isIOS) {
-      externalDir = await getApplicationDocumentsDirectory();
+    final Directory publicMoviesDir = Directory("/storage/emulated/0/Movies");
+    if (!publicMoviesDir.existsSync()) {
+      // 存在しない場合は再帰的に作成
+      publicMoviesDir.createSync(recursive: true);
     }
 
-    if (externalDir == null) return;
-
-    const videoFileName = 'video_from_image.mp4';
-    final videoOutputPath = path.join(externalDir.path, videoFileName);
+    final targetEditData = ref.watch(editDataNotifierProvider);
+    final nowDateString = getDateToString(DateTime.now());
+    final videoFileName = '${targetEditData.title}_$nowDateString.mp4';
+    final videoOutputPath = path.join(publicMoviesDir.path, videoFileName);
 
     final ffmpegCommand =
         '-loop 1 -i $_imagePath -c:v libx264 -t 3 -pix_fmt yuv420p -vf scale=trunc(iw/2)*2:trunc(ih/2)*2 "$videoOutputPath"';
-    await FFmpegKit.execute(ffmpegCommand).then((session) async {
+    await FFmpegKit.executeAsync(ffmpegCommand, (session) async {
       final returnCode = await session.getReturnCode();
       final logs = await session.getAllLogs();
       print('FFmpeg returnCode: $returnCode');
@@ -79,6 +96,7 @@ class EditState extends ConsumerState<Edit> {
         print('FFmpeg log: ${log.getMessage()}');
       }
       if (ReturnCode.isSuccess(returnCode)) {
+        _scanVideoFile(videoOutputPath);
         setState(() {
           _videoPath = videoOutputPath;
         });
@@ -89,7 +107,18 @@ class EditState extends ConsumerState<Edit> {
       }
     });
   }
-  
+
+  Future<void> _scanVideoFile(String filePath) async {
+    try {
+      final bool result = await _channel.invokeMethod('scanFile', {'filePath': filePath});
+      if (result) {
+        print('MediaScanner: ファイルがスキャンされました');
+      }
+    } catch (e) {
+      print('MediaScanner の呼び出しに失敗: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final targetEditData = ref.watch(editDataNotifierProvider);
