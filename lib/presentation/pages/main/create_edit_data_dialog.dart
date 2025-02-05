@@ -79,7 +79,7 @@ class CreateEditDataDialogState extends ConsumerState<CreateEditDataDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text('新しい動画の作成'),
+      title: const Text('新しい動画の作成', style: TextStyle(fontFamily: 'M PLUS Rounded 1c')),
       children: <Widget>[
         Form(
           key: newEditDataFormKey,

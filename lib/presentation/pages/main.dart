@@ -25,8 +25,6 @@ class MainApp extends ConsumerWidget {
       case PageType.templates:
         body = const Templates();
         break;
-      default:
-        body = const Home();
     }
 
     var bottomNavigationBarItem = <BottomNavigationBarItem>[

@@ -31,6 +31,14 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Noto Sans JP
+      fonts:
+        - asset: fonts/NotoSansJP-Regular.ttf
+    - family: M PLUS Rounded 1c
+      fonts:
+        - asset: fonts/MPLUSRounded1c-ExtraBold.ttf
+          weight: 800
 
 flutter_icons:
   ios: true

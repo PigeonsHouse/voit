@@ -4,6 +4,12 @@ import 'presentation/pages/main.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  const app = ProviderScope(child: MaterialApp(title: 'Voit', home: MainApp()));
+  var app = ProviderScope(child: MaterialApp(
+    theme: ThemeData(
+      fontFamily: 'Noto Sans JP',
+    ),
+    title: 'Voit',
+    home: const MainApp(),
+  ));
   runApp(app);
 }
