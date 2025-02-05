@@ -54,15 +54,13 @@ class MainApp extends ConsumerWidget {
           .changePage(PageType.values[index]);
     }
 
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentPage.index,
           onTap: onSwitchBottomNavigation,
           items: bottomNavigationBarItem,
         ),
-      ),
-    );
+      );
   }
 }
