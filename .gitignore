@@ -41,3 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+/assets/model/*
+!/assets/model/.gitkeep
+/assets/open_jtalk/*
+!/assets/open_jtalk/.gitkeep

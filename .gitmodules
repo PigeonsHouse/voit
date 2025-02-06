@@ -1,0 +1,3 @@
+[submodule "voicevox_flutter"]
+	path = voicevox_flutter
+	url = https://github.com/char5742/voicevox_flutter
