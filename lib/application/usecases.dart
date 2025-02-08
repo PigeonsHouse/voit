@@ -38,7 +38,7 @@ class EditDataUsecase {
 
   // カメラロール・フォルダから素材を追加
   void importObject(EditData data, String sceneId, String objectPath) {
-    final scene = data.scenes.firstWhere((scene) => scene.id == sceneId);
+    data.scenes.firstWhere((scene) => scene.id == sceneId);
     // どのObjectを追加するかは後で考える
     // scene.objects.add();
   }

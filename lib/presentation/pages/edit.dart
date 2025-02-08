@@ -4,6 +4,7 @@ import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_min_gpl/return_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:voit/ext/voicevox.dart';
 import 'package:voit/presentation/states/main/edit_data.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -44,7 +45,7 @@ class Edit extends ConsumerStatefulWidget {
 
 class EditState extends ConsumerState<Edit> {
   String? _imagePath;
-  String? _videoPath;
+  final generator = VoiceGenerator();
 
   @override
   void initState() {
@@ -61,15 +62,16 @@ class EditState extends ConsumerState<Edit> {
       setState(() {
         _imagePath = savePath;
       });
-      print(savePath);
     }
   }
 
   Future<void> pickMedia() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      print(result.files[0].path);
-    }
+    await FilePicker.platform.pickFiles();
+  }
+
+  Future<void> voiceVox() async {
+    final path = await generator.generateAudioFile("ずんだもんなのだ");
+    await generator.playGeneratedAudioFile(path);
   }
 
   Future<void> startEncode() async {
@@ -90,33 +92,14 @@ class EditState extends ConsumerState<Edit> {
         '-loop 1 -i $_imagePath -c:v libx264 -t 3 -pix_fmt yuv420p -vf scale=trunc(iw/2)*2:trunc(ih/2)*2 "$videoOutputPath"';
     await FFmpegKit.executeAsync(ffmpegCommand, (session) async {
       final returnCode = await session.getReturnCode();
-      final logs = await session.getAllLogs();
-      print('FFmpeg returnCode: $returnCode');
-      for (final log in logs) {
-        print('FFmpeg log: ${log.getMessage()}');
-      }
       if (ReturnCode.isSuccess(returnCode)) {
         _scanVideoFile(videoOutputPath);
-        setState(() {
-          _videoPath = videoOutputPath;
-        });
-        print(videoOutputPath);
-      } else {
-        final failStackTrace = await session.getFailStackTrace();
-        print('FFmpeg execution failed: $failStackTrace');
       }
     });
   }
 
   Future<void> _scanVideoFile(String filePath) async {
-    try {
-      final bool result = await _channel.invokeMethod('scanFile', {'filePath': filePath});
-      if (result) {
-        print('MediaScanner: ファイルがスキャンされました');
-      }
-    } catch (e) {
-      print('MediaScanner の呼び出しに失敗: $e');
-    }
+    await _channel.invokeMethod('scanFile', {'filePath': filePath});
   }
 
   @override
@@ -184,6 +167,16 @@ class EditState extends ConsumerState<Edit> {
                               children: [
                                 Icon(Icons.photo_library_outlined),
                                 Text('メディア'),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          GestureDetector(
+                            onTap: voiceVox,
+                            child: const Column(
+                              children: [
+                                Icon(Icons.mic),
+                                Text('VOICEVOX'),
                               ],
                             ),
                           ),

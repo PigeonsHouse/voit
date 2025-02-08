@@ -64,4 +64,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.14.0'
+}
