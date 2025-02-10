@@ -4,6 +4,7 @@ import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_min_gpl/return_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:voit/domain/entities.dart';
 import 'package:voit/ext/voicevox.dart';
 import 'package:voit/presentation/states/main/edit_data.dart';
 import 'package:file_picker/file_picker.dart';
@@ -35,7 +36,6 @@ class EditState extends ConsumerState<Edit> {
   final TextEditingController titleController = TextEditingController();
   VideoType videoType = VideoType.portrait;
   String? _imagePath;
-  OverlayEntry? _overlayEntry;
   final generator = VoiceGenerator();
 
   switchVideoTypeLandscape() {
@@ -64,7 +64,8 @@ class EditState extends ConsumerState<Edit> {
   );
 
   onClickCreateButton() async {
-    // todo targetVideoDataを更新する
+    ref.read(editDataNotifierProvider.notifier).setTitle(titleController.text);
+    Navigator.pop(context);
   }
 
 
@@ -74,108 +75,76 @@ class EditState extends ConsumerState<Edit> {
   }
 
   void toggleTopSheet() {
-    if (_overlayEntry != null) {
-      hideTopSheet();
-      return;
-    }
-    final RenderBox renderBox = _menuKey.currentContext!.findRenderObject() as RenderBox;
-    final Offset position = renderBox.localToGlobal(Offset.zero);
-    final double y = position.dy + renderBox.size.height;
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) {
-        return Positioned(
-          top: y,
-          left: 0,
-          right: 0,
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              margin: const EdgeInsets.only(top: 6),
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
-                boxShadow: [
-                  BoxShadow(color: Colors.black26, offset: Offset(0, 2))
-                ]
-              ),
+    final targetEditData = ref.watch(editDataNotifierProvider);
+    titleController.text = targetEditData.title;
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Form(
+              key: newEditDataFormKey,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Form(
-                    key: newEditDataFormKey,
-                    child: Column(
+                  SimpleDialogOption(
+                    child: TextFormField(
+                      controller: titleController,
+                      decoration: const InputDecoration(labelText: 'タイトル'),
+                      validator: titleValidator,
+                    ),
+                  ),
+                  SimpleDialogOption(
+                    child: OverflowBar(
+                      alignment: MainAxisAlignment.center,
                       children: [
-                        SimpleDialogOption(
-                          child: TextFormField(
-                            controller: titleController,
-                            decoration: const InputDecoration(labelText: 'タイトル'),
-                            validator: titleValidator,
+                        ElevatedButton(
+                          onPressed: switchVideoTypeLandscape,
+                          style: videoType == VideoType.landscape
+                              ? selectedButtonStyle
+                              : null,
+                          child: const Column(
+                            children: [Icon(Icons.computer), Text('横型動画')],
                           ),
                         ),
-                        SimpleDialogOption(
-                          child: OverflowBar(
-                            alignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                onPressed: switchVideoTypeLandscape,
-                                style: videoType == VideoType.landscape
-                                    ? selectedButtonStyle
-                                    : null,
-                                child: const Column(
-                                  children: [Icon(Icons.computer), Text('横型動画')],
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: switchVideoTypePortrait,
-                                style: videoType == VideoType.portrait
-                                    ? selectedButtonStyle
-                                    : null,
-                                child: const Column(
-                                  children: [Icon(Icons.smartphone), Text('縦型動画')],
-                                ),
-                              )
-                            ],
+                        ElevatedButton(
+                          onPressed: switchVideoTypePortrait,
+                          style: videoType == VideoType.portrait
+                              ? selectedButtonStyle
+                              : null,
+                          child: const Column(
+                            children: [Icon(Icons.smartphone), Text('縦型動画')],
                           ),
-                        ),
-                        SimpleDialogOption(
-                          child: OverflowBar(children: [
-                            ElevatedButton(
-                              onPressed: hideTopSheet,
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.purple,
-                                backgroundColor: Colors.white,
-                              ),
-                              child: const Text('キャンセル'),
-                            ),
-                            ElevatedButton(
-                              onPressed: onClickCreateButton,
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.purple,
-                              ),
-                              child: const Text('保存'),
-                            ),
-                          ]),
-                        ),
+                        )
                       ],
                     ),
+                  ),
+                  SimpleDialogOption(
+                    child: OverflowBar(children: [
+                      ElevatedButton(
+                        onPressed: () {Navigator.pop(context);},
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.purple,
+                          backgroundColor: Colors.white,
+                        ),
+                        child: const Text('キャンセル'),
+                      ),
+                      ElevatedButton(
+                        onPressed: onClickCreateButton,
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.purple,
+                        ),
+                        child: const Text('保存'),
+                      ),
+                    ]),
                   ),
                 ],
               ),
             ),
-          ),
-        );
-      },
-    );
-
-    Overlay.of(context).insert(_overlayEntry!);
-  }
-
-  void hideTopSheet() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+          ],
+        ),
+      );
+    });
   }
 
   Future<void> pickImage() async {

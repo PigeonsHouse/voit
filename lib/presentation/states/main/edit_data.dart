@@ -32,7 +32,7 @@ class EditDataNotifier extends Notifier<EditData> {
   }
 
   void setTitle(String title) {
-    state.title = title;
+    state = EditData(title: title, resolution: state.resolution, scenes: state.scenes);
   }
 }
 
