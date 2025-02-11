@@ -34,7 +34,6 @@ class EditState extends ConsumerState<Edit> {
   final newEditDataFormKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   VideoType videoType = VideoType.portrait;
-  String? _imagePath;
   final generator = VoiceGenerator();
 
   switchVideoTypeLandscape() {
@@ -153,9 +152,7 @@ class EditState extends ConsumerState<Edit> {
       final fileName = path.basename(file.path);
       final savePath = path.join(dir.path, fileName);
       await File(file.path).copy(savePath);
-      setState(() {
-        _imagePath = savePath;
-      });
+      ref.read(editDataNotifierProvider.notifier).addMedia(savePath, TimelineObjectType.image);
     }
   }
 
@@ -170,7 +167,14 @@ class EditState extends ConsumerState<Edit> {
   }
 
   Future<void> startEncode() async {
-    if (_imagePath == null) return;
+    final editData = ref.read(editDataNotifierProvider);
+    debugPrint('start find objects');
+    if (editData.scenes.isEmpty || editData.scenes[0].objects.isEmpty) return;
+    debugPrint('start find image object');
+    final imageFileIndex = editData.scenes[0].objects.indexWhere((obj) => obj is ImageObject);
+    if (imageFileIndex == -1) return;
+    debugPrint('get image object');
+    final imagePath = editData.scenes[0].objects[imageFileIndex] as ImageObject;
 
     final Directory publicMoviesDir = Directory("/storage/emulated/0/Movies");
     if (!publicMoviesDir.existsSync()) {
@@ -184,11 +188,19 @@ class EditState extends ConsumerState<Edit> {
     final videoOutputPath = path.join(publicMoviesDir.path, videoFileName);
 
     final ffmpegCommand =
-        '-loop 1 -i $_imagePath -c:v libx264 -t 3 -pix_fmt yuv420p -vf scale=trunc(iw/2)*2:trunc(ih/2)*2 "$videoOutputPath"';
+        '-loop 1 -i ${imagePath.filePath} -c:v libx264 -t 3 -pix_fmt yuv420p -vf scale=trunc(iw/2)*2:trunc(ih/2)*2 "$videoOutputPath"';
     await FFmpegKit.executeAsync(ffmpegCommand, (session) async {
+      debugPrint('ffmpeg start');
       final returnCode = await session.getReturnCode();
+      final logs = await session.getAllLogs();
+      debugPrint('FFmpeg returnCode: $returnCode');
+      for (final log in logs) {
+        debugPrint('FFmpeg log: ${log.getMessage()}');
+      }
       if (ReturnCode.isSuccess(returnCode)) {
-        _scanVideoFile(videoOutputPath);
+        debugPrint('ffmpeg success $videoOutputPath');
+        // 何かバグるので一旦コメントアウト
+        // _scanVideoFile(videoOutputPath);
       }
     });
   }
