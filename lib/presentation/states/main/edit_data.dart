@@ -32,7 +32,13 @@ class EditDataNotifier extends Notifier<EditData> {
   }
 
   void setTitle(String title) {
-    state = EditData(title: title, resolution: state.resolution, scenes: state.scenes);
+    state = editDataUsecase.updateTitle(state, title);
+  }
+
+  void addMedia(String baseString, TimelineObjectType type) {
+    // 引数で受け付けたい
+    final targetSceneId = state.scenes[0].id;
+    state = editDataUsecase.importObject(state, targetSceneId, type, baseString);
   }
 }
 

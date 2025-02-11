@@ -55,6 +55,14 @@ class TimelineObject {
   double get endTime => startTime + duration;
 }
 
+enum TimelineObjectType {
+  video,
+  image,
+  audio,
+  text,
+  shape,
+}
+
 class VideoObject extends TimelineObject {
   /// オブジェクトの中央の絶対座標
   Offset position;
@@ -93,6 +101,23 @@ class VideoObject extends TimelineObject {
     required super.startTime,
     required super.duration,
   });
+
+  static VideoObject create(String path) {
+    return VideoObject(
+      position: Offset.zero,
+      angle: 0,
+      opacity: 1,
+      filePath: path,
+      speed: 1,
+      startOffset: 0,
+      volume: 100,
+      pan: 0,
+      startTime: 0,
+      // ここ取得方法を考える
+      // ffprobeと思うけど、typeが異なるバリデーションも必要
+      duration: 100,
+    );
+  }
 }
 
 class ImageObject extends TimelineObject {
@@ -116,6 +141,18 @@ class ImageObject extends TimelineObject {
     required super.startTime,
     required super.duration,
   });
+
+  static ImageObject create(String path) {
+    return ImageObject(
+      position: Offset.zero,
+      angle: 0,
+      opacity: 1,
+      filePath: path,
+      startTime: 0,
+      // ここ取得方法を考える
+      duration: 100,
+    );
+  }
 }
 
 class AudioObject extends TimelineObject {
@@ -144,6 +181,19 @@ class AudioObject extends TimelineObject {
     required super.startTime,
     required super.duration,
   });
+
+  static AudioObject create(String path) {
+    return AudioObject(
+      filePath: path,
+      speed: 1,
+      startOffset: 0,
+      volume: 100,
+      pan: 0,
+      startTime: 0,
+      // ここ取得方法を考える
+      duration: 100,
+    );
+  }
 }
 
 class TextObject extends TimelineObject {
@@ -157,7 +207,7 @@ class TextObject extends TimelineObject {
   String font;
 
   /// フォントサイズ
-  String fontSize;
+  double fontSize;
 
   /// 角度
   double angle;
@@ -183,6 +233,22 @@ class TextObject extends TimelineObject {
     required super.startTime,
     required super.duration,
   });
+
+  static TextObject create(String text) {
+    return TextObject(
+      position: Offset.zero,
+      text: text,
+      font: "",
+      fontSize: 12,
+      angle: 0,
+      opacity: 1,
+      color: Colors.white,
+      maxWidth: 1000,
+      startTime: 0,
+      // ここ取得方法を考える
+      duration: 100,
+    );
+  }
 }
 
 class ShapeObject extends TimelineObject {
@@ -214,4 +280,18 @@ class ShapeObject extends TimelineObject {
     required super.startTime,
     required super.duration,
   });
+
+  static ShapeObject create(String text) {
+    return ShapeObject(
+      position: Offset.zero,
+      type: ShapeType.circle,
+      color: Colors.white,
+      angle: 0,
+      opacity: 1,
+      isOutlineOnly: false,
+      startTime: 0,
+      // ここ取得方法を考える
+      duration: 100,
+    );
+  }
 }

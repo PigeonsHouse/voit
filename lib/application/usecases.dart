@@ -37,10 +37,24 @@ class EditDataUsecase {
   }
 
   // カメラロール・フォルダから素材を追加
-  void importObject(EditData data, String sceneId, String objectPath) {
-    data.scenes.firstWhere((scene) => scene.id == sceneId);
-    // どのObjectを追加するかは後で考える
-    // scene.objects.add();
+  EditData importObject(EditData data, String sceneId, TimelineObjectType type, String baseString) {
+    for (SceneData scene in data.scenes) {
+      if (scene.id != sceneId) continue;
+      switch (type) {
+        case TimelineObjectType.video:
+          scene.objects.add(VideoObject.create(baseString));
+        case TimelineObjectType.image:
+          scene.objects.add(ImageObject.create(baseString));
+        case TimelineObjectType.audio:
+          scene.objects.add(AudioObject.create(baseString));
+        case TimelineObjectType.text:
+          scene.objects.add(TextObject.create(baseString));
+        case TimelineObjectType.shape:
+          scene.objects.add(ShapeObject.create(baseString));
+      }
+    }
+
+    return EditData(title: data.title, resolution: data.resolution, scenes: data.scenes);
   }
 
   // オブジェクトの開始位置を変更する
@@ -49,6 +63,10 @@ class EditDataUsecase {
   // オブジェクトのパラメータ(エフェクト)を変更する
   void changeObjectParameter(int id, double parameter) {
     // これがエフェクトの数だけ生える気がする。実装大量に必要そう。
+  }
+
+  EditData updateTitle(EditData data, String title) {
+    return EditData(title: title, resolution: data.resolution, scenes: data.scenes);
   }
 
   // 動画を出力する

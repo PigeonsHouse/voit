@@ -31,7 +31,6 @@ class Edit extends ConsumerStatefulWidget {
 }
 
 class EditState extends ConsumerState<Edit> {
-  final GlobalKey _menuKey = GlobalKey();
   final newEditDataFormKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   VideoType videoType = VideoType.portrait;
@@ -166,6 +165,7 @@ class EditState extends ConsumerState<Edit> {
 
   Future<void> voiceVox() async {
     final path = await generator.generateAudioFile("ずんだもんなのだ");
+    ref.read(editDataNotifierProvider.notifier).addMedia(path, TimelineObjectType.audio);
     await generator.playGeneratedAudioFile(path);
   }
 
@@ -205,7 +205,7 @@ class EditState extends ConsumerState<Edit> {
       appBar: AppBar(
         title: Text(targetEditData.title, style: const TextStyle(fontSize: 18),),
         actions: [
-          IconButton(onPressed: toggleTopSheet, icon: const Icon(Icons.article), key: _menuKey,),
+          IconButton(onPressed: toggleTopSheet, icon: const Icon(Icons.article)),
           IconButton(onPressed: startEncode, icon: const Icon(Icons.file_upload))
         ],
         bottom: PreferredSize(preferredSize: const Size.fromHeight(2), child: Container(color: Colors.black12, height: 2,)),
@@ -218,7 +218,14 @@ class EditState extends ConsumerState<Edit> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(targetEditData.resolution.toString()),
-                  Text(targetEditData.scenes.toString()),
+                  ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: targetEditData.scenes.length,
+                    itemBuilder: (context, idx) {
+                      return Text(targetEditData.scenes[idx].objects.toString());
+                    }
+                  ),
                 ],
               ),
             ),
