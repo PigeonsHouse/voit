@@ -1,4 +1,4 @@
-package com.voit
+package app.voit
 
 import android.app.Application
 import com.facebook.react.PackageList

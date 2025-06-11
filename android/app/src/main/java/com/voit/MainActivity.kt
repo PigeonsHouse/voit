@@ -1,4 +1,4 @@
-package com.voit
+package app.voit
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
