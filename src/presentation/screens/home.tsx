@@ -15,7 +15,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { Section } from "../components";
 
-const Index: React.FC = () => {
+export const Home: React.FC = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -66,5 +66,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
-export default Index;
