@@ -26,7 +26,7 @@ export class EditData {
     id: string,
     title: string,
     resolution: Size,
-    scenes: SceneData[]
+    scenes: SceneData[],
   ) {
     this.id = id;
     this.title = title;
@@ -41,5 +41,3 @@ export class EditData {
     return this.scenes.reduce((prev, scene) => prev + scene.duration, 0);
   }
 }
-
-export default EditData

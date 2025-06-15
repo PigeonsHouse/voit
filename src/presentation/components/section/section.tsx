@@ -1,17 +1,14 @@
-import React, { PropsWithChildren } from 'react';
-import { Text, useColorScheme, View } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { styles } from './style';
+import React, { PropsWithChildren } from "react";
+import { Text, useColorScheme, View } from "react-native";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { styles } from "./style";
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-export const Section: React.FC<SectionProps> = ({
-  children,
-  title,
-}) => {
-  const isDarkMode = useColorScheme() === 'dark';
+export const Section: React.FC<SectionProps> = ({ children, title }) => {
+  const isDarkMode = useColorScheme() === "dark";
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -20,7 +17,8 @@ export const Section: React.FC<SectionProps> = ({
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
-        ]}>
+        ]}
+      >
         {title}
       </Text>
       <Text
@@ -29,9 +27,10 @@ export const Section: React.FC<SectionProps> = ({
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
-        ]}>
+        ]}
+      >
         {children}
       </Text>
     </View>
   );
-}
+};

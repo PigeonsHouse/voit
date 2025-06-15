@@ -2,7 +2,10 @@ import { Offset, Size } from "../../common";
 import { PlayableObject, ResourceObject, ViewableObject } from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
-export class VideoObject extends TimelineObject implements ViewableObject, PlayableObject, ResourceObject {
+export class VideoObject
+  extends TimelineObject
+  implements ViewableObject, PlayableObject, ResourceObject
+{
   declare id: string;
   declare startTime: number;
   declare duration: number;
@@ -31,7 +34,7 @@ export class VideoObject extends TimelineObject implements ViewableObject, Playa
     startOffset: number,
     volume: number,
     pan: number,
-    filePath: string
+    filePath: string,
   ) {
     super(id, startTime, duration);
     this.size = size;

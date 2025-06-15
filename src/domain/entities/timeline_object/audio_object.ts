@@ -1,7 +1,10 @@
 import { PlayableObject, ResourceObject } from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
-export class AudioObject extends TimelineObject implements PlayableObject, ResourceObject {
+export class AudioObject
+  extends TimelineObject
+  implements PlayableObject, ResourceObject
+{
   declare id: string;
   declare startTime: number;
   declare duration: number;

@@ -21,15 +21,17 @@ export interface PlayableObject {
   pan: number;
 }
 
-export function isPlayableObject(
-  obj: any
-): obj is PlayableObject {
+export function isPlayableObject(obj: any): obj is PlayableObject {
   return (
     typeof obj === "object" &&
     obj !== null &&
-    "playSpeed" in obj && typeof obj.playSpeed === "number" &&
-    "startOffset" in obj && typeof obj.startOffset === "number" &&
-    "volume" in obj && typeof obj.volume === "number" &&
-    "pan" in obj && typeof obj.pan === "number"
+    "playSpeed" in obj &&
+    typeof obj.playSpeed === "number" &&
+    "startOffset" in obj &&
+    typeof obj.startOffset === "number" &&
+    "volume" in obj &&
+    typeof obj.volume === "number" &&
+    "pan" in obj &&
+    typeof obj.pan === "number"
   );
 }

@@ -2,7 +2,10 @@ import { Size, Offset } from "../../common";
 import { ColoredObject, ViewableObject } from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
-export class ShapeObject extends TimelineObject implements ViewableObject, ColoredObject {
+export class ShapeObject
+  extends TimelineObject
+  implements ViewableObject, ColoredObject
+{
   declare id: string;
   declare startTime: number;
   declare duration: number;
@@ -23,7 +26,7 @@ export class ShapeObject extends TimelineObject implements ViewableObject, Color
     angle: number,
     opacity: number,
     scale: number,
-    color: string
+    color: string,
   ) {
     super(id, startTime, duration);
     this.size = size;

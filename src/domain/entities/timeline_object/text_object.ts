@@ -2,7 +2,10 @@ import { Size, Offset } from "../../common";
 import { ColoredObject, ViewableObject } from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
-export class TextObject extends TimelineObject implements ColoredObject, ViewableObject {
+export class TextObject
+  extends TimelineObject
+  implements ColoredObject, ViewableObject
+{
   declare id: string;
   declare startTime: number;
   declare duration: number;
@@ -24,7 +27,7 @@ export class TextObject extends TimelineObject implements ColoredObject, Viewabl
    */
   font: string;
 
-  /** 
+  /**
    * フォントサイズ
    */
   fontSize: number;

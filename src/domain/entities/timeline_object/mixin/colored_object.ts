@@ -5,9 +5,7 @@ export interface ColoredObject {
   color: string;
 }
 
-export function isColoredObject(
-  obj: any
-): obj is ColoredObject {
+export function isColoredObject(obj: any): obj is ColoredObject {
   return (
     typeof obj === "object" &&
     obj !== null &&

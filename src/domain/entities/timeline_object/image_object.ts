@@ -2,7 +2,10 @@ import { Offset, Size } from "../../common";
 import { ResourceObject, ViewableObject } from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
-export class ImageObject extends TimelineObject implements ViewableObject, ResourceObject {
+export class ImageObject
+  extends TimelineObject
+  implements ViewableObject, ResourceObject
+{
   declare id: string;
   declare startTime: number;
   declare duration: number;
@@ -23,7 +26,7 @@ export class ImageObject extends TimelineObject implements ViewableObject, Resou
     angle: number,
     opacity: number,
     scale: number,
-    filePath: string
+    filePath: string,
   ) {
     super(id, startTime, duration);
     this.size = size;

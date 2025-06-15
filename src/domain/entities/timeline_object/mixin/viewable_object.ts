@@ -30,9 +30,7 @@ export interface ViewableObject {
   scale: number;
 }
 
-export function isViewableObject(
-  obj: any
-): obj is ViewableObject {
+export function isViewableObject(obj: any): obj is ViewableObject {
   return (
     typeof obj === "object" &&
     obj !== null &&
