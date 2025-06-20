@@ -22,6 +22,7 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
         alignItems: "center",
         paddingHorizontal: 16,
       }}
+      edges={["top", "left", "right"]}
     >
       <Text style={{ fontSize: 32, margin: 12, fontWeight: "bold" }}>
         ぼいっと
