@@ -25,10 +25,28 @@ export interface ViewableObject {
 
   /**
    * オブジェクトの拡大率
-   * 100は元のサイズ、200は2倍、50は半分のサイズを表す
+   * 等倍が1
    */
   scale: number;
 }
+
+export const constructViewableObject = (
+  object: ViewableObject,
+  size: Size,
+  position: Offset,
+  angle: number,
+  opacity: number,
+  scale: number,
+): ViewableObject => {
+  return {
+    ...object,
+    size,
+    position,
+    angle,
+    opacity,
+    scale,
+  };
+};
 
 export function isViewableObject(obj: any): obj is ViewableObject {
   return (

@@ -23,10 +23,10 @@ export class EditData {
   scenes: SceneData[];
 
   constructor(
-    id: string,
     title: string,
     resolution: Size,
-    scenes: SceneData[],
+    id: string = crypto.randomUUID(),
+    scenes: SceneData[] = [],
   ) {
     this.id = id;
     this.title = title;

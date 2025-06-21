@@ -21,6 +21,22 @@ export interface PlayableObject {
   pan: number;
 }
 
+export const constructPlayableObject = (
+  object: PlayableObject,
+  playSpeed: number,
+  startOffset: number,
+  volume: number,
+  pan: number,
+): PlayableObject => {
+  return {
+    ...object,
+    playSpeed,
+    startOffset,
+    volume,
+    pan,
+  };
+};
+
 export function isPlayableObject(obj: any): obj is PlayableObject {
   return (
     typeof obj === "object" &&

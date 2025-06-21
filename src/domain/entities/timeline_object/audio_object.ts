@@ -1,4 +1,9 @@
-import { PlayableObject, ResourceObject } from "./mixin";
+import {
+  constructPlayableObject,
+  constructResourceObject,
+  PlayableObject,
+  ResourceObject,
+} from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
 export class AudioObject
@@ -6,30 +11,47 @@ export class AudioObject
   implements PlayableObject, ResourceObject
 {
   declare id: string;
-  declare startTime: number;
   declare duration: number;
+  declare layer: number;
+  declare startTime: number;
+  declare filePath: string;
+  declare playSpeed: number;
+  declare startOffset: number;
+  declare volume: number;
+  declare pan: number;
 
-  filePath: string;
-  playSpeed: number;
-  startOffset: number;
-  volume: number;
-  pan: number;
-
-  constructor(
+  private constructor(
     id: string,
-    startTime: number,
     duration: number,
+    layer: number,
+    startTime: number,
     filePath: string,
     playSpeed: number,
     startOffset: number,
     volume: number,
     pan: number,
   ) {
-    super(id, startTime, duration);
-    this.filePath = filePath;
-    this.playSpeed = playSpeed;
-    this.startOffset = startOffset;
-    this.volume = volume;
-    this.pan = pan;
+    super(id, duration, layer, startTime);
+    constructPlayableObject(this, playSpeed, startOffset, volume, pan);
+    constructResourceObject(this, filePath);
+  }
+
+  public static create(
+    duration: number,
+    layer: number,
+    startTime: number,
+    filePath: string,
+  ): AudioObject {
+    return new AudioObject(
+      crypto.randomUUID(),
+      duration,
+      layer,
+      startTime,
+      filePath,
+      1,
+      0,
+      100,
+      0,
+    );
   }
 }

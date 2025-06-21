@@ -1,5 +1,10 @@
-import { Offset, Size } from "../../common";
-import { ResourceObject, ViewableObject } from "./mixin";
+import { Offset, Size, ZeroOffset } from "../../common";
+import {
+  constructResourceObject,
+  constructViewableObject,
+  ResourceObject,
+  ViewableObject,
+} from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
 export class ImageObject
@@ -7,33 +12,50 @@ export class ImageObject
   implements ViewableObject, ResourceObject
 {
   declare id: string;
-  declare startTime: number;
   declare duration: number;
+  declare layer: number;
+  declare startTime: number;
+  declare filePath: string;
+  declare size: Size;
+  declare position: Offset;
+  declare angle: number;
+  declare opacity: number;
+  declare scale: number;
 
-  size: Size;
-  position: Offset;
-  angle: number;
-  opacity: number;
-  scale: number;
-  filePath: string;
-
-  constructor(
+  private constructor(
     id: string,
+    layer: number,
     startTime: number,
-    duration: number,
+    filePath: string,
     size: Size,
+    duration: number,
     position: Offset,
     angle: number,
     opacity: number,
     scale: number,
-    filePath: string,
   ) {
-    super(id, startTime, duration);
-    this.size = size;
-    this.position = position;
-    this.angle = angle;
-    this.opacity = opacity;
-    this.scale = scale;
-    this.filePath = filePath;
+    super(id, layer, startTime, duration);
+    constructViewableObject(this, size, position, angle, opacity, scale);
+    constructResourceObject(this, filePath);
+  }
+
+  public static create(
+    layer: number,
+    startTime: number,
+    filePath: string,
+    size: Size,
+  ): ImageObject {
+    return new ImageObject(
+      crypto.randomUUID(),
+      layer,
+      startTime,
+      filePath,
+      size,
+      3,
+      ZeroOffset,
+      0,
+      100,
+      1,
+    );
   }
 }

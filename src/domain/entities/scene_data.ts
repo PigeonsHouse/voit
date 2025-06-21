@@ -11,7 +11,10 @@ export class SceneData {
    */
   objects: TimelineObject[];
 
-  constructor(id: string, objects: TimelineObject[]) {
+  constructor(
+    id: string = crypto.randomUUID(),
+    objects: TimelineObject[] = [],
+  ) {
     this.id = id;
     this.objects = objects;
   }

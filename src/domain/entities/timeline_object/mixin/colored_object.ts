@@ -5,6 +5,16 @@ export interface ColoredObject {
   color: string;
 }
 
+export const constructColoredObject = (
+  object: ColoredObject,
+  color: string,
+): ColoredObject => {
+  return {
+    ...object,
+    color,
+  };
+};
+
 export function isColoredObject(obj: any): obj is ColoredObject {
   return (
     typeof obj === "object" &&
