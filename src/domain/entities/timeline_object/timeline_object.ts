@@ -1,3 +1,5 @@
+export type TimelineObjectType = "video" | "image" | "audio" | "text" | "shape";
+
 export abstract class TimelineObject {
   /**
    * オブジェクトのID

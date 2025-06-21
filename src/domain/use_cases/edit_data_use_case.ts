@@ -9,6 +9,7 @@ import {
   ShapeObject,
   TextObject,
   TimelineObject,
+  TimelineObjectType,
   VideoObject,
   ViewableObject,
 } from "../entities";
@@ -44,6 +45,9 @@ export class EditDataUseCase {
   // シーンを削除する
   async removeScene(data: EditData, sceneId: string): Promise<void> {
     data.scenes = data.scenes.filter((scene) => scene.id !== sceneId);
+    if (data.scenes.length === 0) {
+      data.scenes.push(new SceneData());
+    }
     await this.repository.saveEditData(data);
   }
 
@@ -51,7 +55,7 @@ export class EditDataUseCase {
   async importObject(
     data: EditData,
     sceneId: string,
-    type: "video" | "image" | "audio" | "text" | "shape",
+    type: TimelineObjectType,
     baseString: string,
     startTime: number,
   ): Promise<string | undefined> {

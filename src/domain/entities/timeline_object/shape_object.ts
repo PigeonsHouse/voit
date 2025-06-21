@@ -7,6 +7,15 @@ import {
 } from "./mixin";
 import { TimelineObject } from "./timeline_object";
 
+export type ShapeType =
+  | "circle"
+  | "rectangle"
+  | "star"
+  | "triangle"
+  | "line"
+  | "pentagon"
+  | "hexagon";
+
 export class ShapeObject
   extends TimelineObject
   implements ViewableObject, ColoredObject
@@ -25,7 +34,7 @@ export class ShapeObject
   /**
    * 形状の種類
    */
-  shapeType: "rectangle" | "circle" | "line";
+  shapeType: ShapeType;
 
   constructor(
     id: string,
@@ -38,7 +47,7 @@ export class ShapeObject
     opacity: number,
     scale: number,
     color: string,
-    shapeType: "rectangle" | "circle" | "line",
+    shapeType: ShapeType,
   ) {
     super(id, layer, startTime, duration);
     constructViewableObject(this, size, position, angle, opacity, scale);
@@ -58,7 +67,7 @@ export class ShapeObject
       100,
       1,
       "white",
-      "rectangle",
+      "circle",
     );
   }
 }
