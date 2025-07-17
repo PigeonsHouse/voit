@@ -13,7 +13,7 @@ import {
   VideoObject,
   ViewableObject,
 } from "../entities";
-import { EditDataRepository } from "../repositories";
+import { DbEditData, EditDataRepository } from "../repositories";
 import { FilesService, MediaService } from "../services";
 
 export class EditDataUseCase {
@@ -33,13 +33,13 @@ export class EditDataUseCase {
     this.filesService = filesService;
   }
 
-  async getEditDataList(): Promise<object[]> {
+  async getEditDataList(): Promise<DbEditData[]> {
     return await this.repository.getEditDataList();
   }
 
   async createEditData(title: string, resolution: Size): Promise<EditData> {
     const data = new EditData(title, resolution);
-    await this.repository.saveEditData(data);
+    await this.save(data);
     return data;
   }
 

@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import { Offset, Size, ZeroOffset } from "../../common";
 import {
   constructPlayableObject,
@@ -58,7 +59,7 @@ export class VideoObject
     size: Size,
   ) {
     return new VideoObject(
-      crypto.randomUUID(),
+      uuid.v4() as string,
       duration,
       layer,
       startTime,

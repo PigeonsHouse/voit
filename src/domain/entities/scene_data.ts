@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import { TimelineObject } from "./timeline_object";
 
 export class SceneData {
@@ -12,7 +13,7 @@ export class SceneData {
   objects: TimelineObject[];
 
   constructor(
-    id: string = crypto.randomUUID(),
+    id: string = uuid.v4() as string,
     objects: TimelineObject[] = [],
   ) {
     this.id = id;

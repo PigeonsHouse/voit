@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import { Size, Offset, ZeroSize, ZeroOffset } from "../../common";
 import {
   ColoredObject,
@@ -57,7 +58,7 @@ export class ShapeObject
 
   public static create(layer: number, startTime: number) {
     return new ShapeObject(
-      crypto.randomUUID(),
+      uuid.v4() as string,
       3,
       layer,
       startTime,

@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import { Offset, Size, ZeroOffset } from "../../common";
 import {
   constructResourceObject,
@@ -46,7 +47,7 @@ export class ImageObject
     size: Size,
   ): ImageObject {
     return new ImageObject(
-      crypto.randomUUID(),
+      uuid.v4() as string,
       layer,
       startTime,
       filePath,

@@ -14,6 +14,7 @@ export class FilesServiceImpl implements FilesService {
     try {
       return Object.assign(EditData.Dummy(), JSON.parse(fileContent));
     } catch (error) {
+      console.error("Failed to parse edit data:", error);
       throw new Error("Failed to restore edit data");
     }
   }

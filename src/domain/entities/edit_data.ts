@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import { Size } from "../common";
 import { SceneData } from "./scene_data";
 
@@ -25,7 +26,7 @@ export class EditData {
   constructor(
     title: string,
     resolution: Size,
-    id: string = crypto.randomUUID(),
+    id: string = uuid.v4() as string,
     scenes: SceneData[] = [],
   ) {
     this.id = id;

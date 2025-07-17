@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import { Size, Offset, ZeroOffset } from "../../common";
 import {
   ColoredObject,
@@ -74,7 +75,7 @@ export class TextObject
     text: string,
   ): TextObject {
     return new TextObject(
-      crypto.randomUUID(),
+      uuid.v4() as string,
       3,
       layer,
       startTime,

@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import {
   constructPlayableObject,
   constructResourceObject,
@@ -43,7 +44,7 @@ export class AudioObject
     filePath: string,
   ): AudioObject {
     return new AudioObject(
-      crypto.randomUUID(),
+      uuid.v4() as string,
       duration,
       layer,
       startTime,
