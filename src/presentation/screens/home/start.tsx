@@ -107,7 +107,10 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={{ padding: 12, flex: 1, margin: 4, aspectRatio: 1 }} />
+            <View
+              key="dummy"
+              style={{ padding: 12, flex: 1, margin: 4, aspectRatio: 1 }}
+            />
           )
         }
         keyExtractor={(item) => item?.toString() || Math.random().toString()}
