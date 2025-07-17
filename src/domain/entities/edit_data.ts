@@ -40,4 +40,8 @@ export class EditData {
   get duration(): number {
     return this.scenes.reduce((prev, scene) => prev + scene.duration, 0);
   }
+
+  static Dummy(): EditData {
+    return new EditData("", { width: 0, height: 0 });
+  }
 }

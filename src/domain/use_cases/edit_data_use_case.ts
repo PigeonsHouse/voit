@@ -14,16 +14,23 @@ import {
   ViewableObject,
 } from "../entities";
 import { EditDataRepository } from "../repositories";
-import { MediaService } from "../services";
+import { FilesService, MediaService } from "../services";
 
 export class EditDataUseCase {
   private repository: EditDataRepository;
 
   private mediaService: MediaService;
 
-  constructor(repository: EditDataRepository, mediaService: MediaService) {
+  private filesService: FilesService;
+
+  constructor(
+    repository: EditDataRepository,
+    mediaService: MediaService,
+    filesService: FilesService,
+  ) {
     this.repository = repository;
     this.mediaService = mediaService;
+    this.filesService = filesService;
   }
 
   async getEditDataList(): Promise<object[]> {
@@ -279,10 +286,11 @@ export class EditDataUseCase {
   // 編集データを保存する
   async save(data: EditData): Promise<void> {
     await this.repository.saveEditData(data);
+    await this.filesService.saveEditData(data);
   }
 
   // 編集データを開く
   async restore(id: string): Promise<EditData> {
-    return this.repository.restoreEditData(id);
+    return this.filesService.restoreEditData(id);
   }
 }

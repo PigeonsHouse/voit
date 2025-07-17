@@ -1,17 +1,117 @@
+import SQLite from "react-native-sqlite-storage";
 import { EditData } from "../../domain/entities";
-import { EditDataRepository } from "../../domain/repositories";
+import { DbEditData, EditDataRepository } from "../../domain/repositories";
 
 export class EditDataRepositoryImpl extends EditDataRepository {
-  initDatabase(): Promise<void> {
-    throw new Error("Method not implemented.");
+  editDataDbFile = "edit_data_database.db";
+  tableName = "edit_data";
+  version = 1;
+  database: SQLite.SQLiteDatabase | null = null;
+
+  async initDatabase(): Promise<void> {
+    SQLite.enablePromise(true);
+    this.database = await SQLite.openDatabase({
+      name: this.editDataDbFile,
+      location: "default",
+    });
+    this.database.transaction((tx) => {
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS ${this.tableName} (id TEXT PRIMARY KEY, title TEXT)`,
+        [],
+      );
+    });
   }
-  getEditDataList(): Promise<object[]> {
-    throw new Error("Method not implemented.");
+
+  async getEditDataList(): Promise<DbEditData[]> {
+    if (!this.database) {
+      throw new Error("Database is not initialized. Call initDatabase first.");
+    }
+    const editDataList: DbEditData[] = [];
+    await this.database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM ${this.tableName}`,
+        [],
+        (tx, result) => {
+          for (let i = 0; i < result.rows.length; i++) {
+            const item = result.rows.item(i);
+            editDataList.push({
+              id: item.id,
+              title: item.title,
+            });
+          }
+        },
+        (error) => {
+          console.error("Error fetching edit data list:", error);
+          throw error;
+        },
+      );
+    });
+    return editDataList;
   }
-  saveEditData(editData: EditData): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async saveEditData(editData: EditData): Promise<void> {
+    if (!this.database) {
+      throw new Error("Database is not initialized. Call initDatabase first.");
+    }
+    this.database.transaction(
+      (tx) => {
+        tx.executeSql(
+          `SELECT * FROM ${this.tableName}`,
+          [],
+          (tx, result) => {
+            for (let i = 0; i < result.rows.length; i++) {
+              if (result.rows.item(i).id === editData.id) {
+                tx.executeSql(
+                  `UPDATE ${this.tableName} SET title = ? WHERE id = ?`,
+                  [editData.title, editData.id],
+                );
+                return;
+              }
+            }
+            tx.executeSql(
+              `INSERT INTO ${this.tableName} (id, title) VALUES (?, ?)`,
+              [editData.id, editData.title],
+            );
+          },
+          (error) => {
+            console.error("Error fetching edit data list:", error);
+            throw error;
+          },
+        );
+      },
+      (error) => {
+        console.error("Transaction error:", error);
+        throw error;
+      },
+    );
   }
-  restoreEditData(id: string): Promise<EditData> {
-    throw new Error("Method not implemented.");
+
+  async restoreEditData(id: string): Promise<EditData> {
+    return new Promise((resolve, reject) => {
+      if (!this.database) {
+        throw new Error(
+          "Database is not initialized. Call initDatabase first.",
+        );
+      }
+      this.database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM ${this.tableName} WHERE id = ?`,
+          [id],
+          (tx, result) => {
+            if (result.rows.length > 0) {
+              const row = result.rows.item(0);
+              const editData = new EditData(row.id, row.title);
+              resolve(editData);
+            } else {
+              reject(new Error("Edit data not found"));
+            }
+          },
+          (error) => {
+            console.error("Error fetching edit data:", error);
+            reject(error);
+          },
+        );
+      });
+    });
   }
 }
