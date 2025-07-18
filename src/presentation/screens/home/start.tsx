@@ -3,7 +3,7 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { EditData } from "../../../domain/entities";
 import { DbEditData } from "../../../domain/repositories";
-import { useUseCases } from "../../context/use_case_provider";
+import { useUseCases } from "../../context";
 
 type StartProps = {
   navigation: {
