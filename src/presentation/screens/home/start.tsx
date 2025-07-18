@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Icon from "react-native-vector-icons/FontAwesome6";
 import { EditData } from "../../../domain/entities";
 import { DbEditData } from "../../../domain/repositories";
 import { useUseCases } from "../../context";
 
 type StartProps = {
   navigation: {
-    navigate: (screen: string, params: EditData) => void;
+    navigate: (screen: string, params: { editData: EditData }) => void;
   };
 };
 
@@ -20,14 +22,14 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
       ?.createEditData("新しいプロジェクト", { width: 1280, height: 720 })
       .then((editData) => {
         loadEditDataList();
-        navigation.navigate("Edit", editData);
+        navigation.navigate("Edit", { editData });
       });
   }, [editDataUseCase, navigation]);
 
   const handleExistVideo = useCallback(
     (id: string) => {
       editDataUseCase?.restore(id).then((editData) => {
-        navigation.navigate("Edit", editData);
+        navigation.navigate("Edit", { editData });
       });
     },
     [editDataUseCase, navigation],
@@ -54,27 +56,36 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
         flex: 1,
         alignItems: "center",
         paddingHorizontal: 16,
+        backgroundColor: "black",
       }}
       edges={["top", "left", "right"]}
     >
-      <Text style={{ fontSize: 32, margin: 12, fontWeight: "bold" }}>
-        ぼいっと
-      </Text>
-      <TouchableOpacity
-        onPress={handleNewVideo}
+      <LinearGradient
+        start={{ x: 0.8, y: 2 }}
+        end={{ x: 0, y: 0 }}
+        colors={["#0095c2ff", "#2cff37ff"]}
         style={{
-          padding: 16,
-          backgroundColor: "#35A8E0",
-          borderRadius: 12,
           width: "100%",
-          height: 72,
-          alignItems: "center",
-          justifyContent: "center",
+          borderRadius: 12,
         }}
       >
-        <Text style={{ color: "white", fontSize: 20 }}>動画を作る</Text>
-      </TouchableOpacity>
-      <Text style={{ marginTop: 8 }}>最近のプロジェクト</Text>
+        <TouchableOpacity
+          onPress={handleNewVideo}
+          style={{
+            padding: 16,
+            height: 96,
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 4,
+          }}
+        >
+          <Text style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
+            新しいプロジェクト
+          </Text>
+          <Icon name="square-plus" color="black" size={24} solid />
+        </TouchableOpacity>
+      </LinearGradient>
+      <Text style={{ marginTop: 8, color: "white" }}>最近のプロジェクト</Text>
       <FlatList
         style={{ marginTop: 8, width: "100%" }}
         data={dataForView}
@@ -89,8 +100,7 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
                 margin: 4,
                 aspectRatio: 1,
                 borderRadius: 4,
-                backgroundColor: "#F1F0F0",
-                boxShadow: "0px 2px 4px #00000030",
+                backgroundColor: "#444",
               }}
               key={item.id}
             >
@@ -103,7 +113,7 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
                   alignItems: "center",
                 }}
               >
-                <Text>{item.title}</Text>
+                <Text style={{ color: "white" }}>{item.title}</Text>
               </TouchableOpacity>
             </View>
           ) : (
