@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/FontAwesome6";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { EditData } from "../../../domain/entities";
 import { DbEditData } from "../../../domain/repositories";
 import { useUseCases } from "../../context";
@@ -82,7 +82,7 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
           <Text style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
             新しいプロジェクト
           </Text>
-          <Icon name="square-plus" color="black" size={24} solid />
+          <Icon name="plus-box" color="black" size={24} />
         </TouchableOpacity>
       </LinearGradient>
       <Text style={{ marginTop: 8, color: "white" }}>最近のプロジェクト</Text>

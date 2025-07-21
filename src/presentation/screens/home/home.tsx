@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome6";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MyPage } from "./mypage";
 import { Start } from "./start";
@@ -25,7 +25,7 @@ export const Home: React.FC = () => {
         component={Start}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="house" color={color} size={size} solid />
+            <Icon name="home" color={color} size={size + 4} />
           ),
         }}
       />
@@ -34,7 +34,7 @@ export const Home: React.FC = () => {
         component={MyPage}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="user" color={color} size={size} solid />
+            <Icon name="account" color={color} size={size + 4} />
           ),
         }}
       />
