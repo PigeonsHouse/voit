@@ -123,7 +123,6 @@ export const Start: React.FC<StartProps> = ({ navigation }) => {
             />
           )
         }
-        keyExtractor={(item) => item?.toString() || Math.random().toString()}
       />
     </SafeAreaView>
   );
