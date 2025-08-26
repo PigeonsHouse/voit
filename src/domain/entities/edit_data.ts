@@ -23,16 +23,16 @@ export class EditData {
    */
   scenes: SceneData[];
 
-  constructor(
-    title: string,
-    resolution: Size,
-    id: string = uuid.v4() as string,
-    scenes: SceneData[] = [],
-  ) {
-    this.id = id;
-    this.title = title;
-    this.resolution = resolution;
-    this.scenes = scenes;
+  constructor(props: {
+    id?: string;
+    title: string;
+    resolution: Size;
+    scenes?: SceneData[];
+  }) {
+    this.id = props.id ?? uuid.v4().toString();
+    this.title = props.title;
+    this.resolution = props.resolution;
+    this.scenes = props.scenes ?? [new SceneData()];
   }
 
   /**
@@ -43,6 +43,9 @@ export class EditData {
   }
 
   static Dummy(): EditData {
-    return new EditData("", { width: 0, height: 0 });
+    return new EditData({
+      title: "",
+      resolution: { width: 0, height: 0 },
+    });
   }
 }

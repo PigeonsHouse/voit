@@ -38,7 +38,7 @@ export class EditDataUseCase {
   }
 
   async createEditData(title: string, resolution: Size): Promise<EditData> {
-    const data = new EditData(title, resolution);
+    const data = new EditData({ title, resolution });
     await this.save(data);
     return data;
   }

@@ -85,33 +85,4 @@ export class EditDataRepositoryImpl extends EditDataRepository {
       },
     );
   }
-
-  async restoreEditData(id: string): Promise<EditData> {
-    return new Promise((resolve, reject) => {
-      if (!this.database) {
-        throw new Error(
-          "Database is not initialized. Call initDatabase first.",
-        );
-      }
-      this.database.transaction((tx) => {
-        tx.executeSql(
-          `SELECT * FROM ${this.tableName} WHERE id = ?`,
-          [id],
-          (tx, result) => {
-            if (result.rows.length > 0) {
-              const row = result.rows.item(0);
-              const editData = new EditData(row.id, row.title);
-              resolve(editData);
-            } else {
-              reject(new Error("Edit data not found"));
-            }
-          },
-          (error) => {
-            console.error("Error fetching edit data:", error);
-            reject(error);
-          },
-        );
-      });
-    });
-  }
 }
